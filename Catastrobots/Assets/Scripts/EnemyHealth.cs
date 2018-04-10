@@ -54,7 +54,8 @@ public class EnemyHealth : MonoBehaviour {
         StartSinking();
         isDead = true;
 
-        if(boxCollider != null)
+
+        if (boxCollider != null)
         {
             boxCollider.isTrigger = true;
         }

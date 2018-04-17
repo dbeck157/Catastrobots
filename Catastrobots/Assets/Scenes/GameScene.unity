@@ -3658,7 +3658,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 1
@@ -7226,6 +7226,7 @@ MonoBehaviour:
   - {fileID: 1437067652}
   - {fileID: 1829307271}
   - {fileID: 32083551}
+  enemyCount: 0
 --- !u!4 &1704651112
 Transform:
   m_ObjectHideFlags: 0
@@ -8746,6 +8747,22 @@ Prefab:
         type: 2}
       propertyPath: timeBetweenBullets
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114760191838830920, guid: e2905867167181648965e3a65bde0c1a,
+        type: 2}
+      propertyPath: grenade
+      value: 
+      objectReference: {fileID: 1248532634175290, guid: 8264e477f57bd85478e47b209233019d,
+        type: 2}
+    - target: {fileID: 114760191838830920, guid: e2905867167181648965e3a65bde0c1a,
+        type: 2}
+      propertyPath: maxGrenadeCount
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 114760191838830920, guid: e2905867167181648965e3a65bde0c1a,
+        type: 2}
+      propertyPath: maxAmmo
+      value: 100
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e2905867167181648965e3a65bde0c1a, type: 2}

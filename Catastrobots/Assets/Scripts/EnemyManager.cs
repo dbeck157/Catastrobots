@@ -8,6 +8,7 @@ public class EnemyManager : MonoBehaviour {
     public GameObject enemy;
     public float spawnTime = 3f;
     public Transform[] spawnPoints;
+    public int enemyCount;
 
     private void Start()
     {
@@ -20,8 +21,15 @@ public class EnemyManager : MonoBehaviour {
         {
             return;
         }
-        
+
+        enemyCount = Random.Range(1, 5);
         int spawnPointIndex = Random.Range(0, spawnPoints.Length);
-        Instantiate(enemy, spawnPoints[spawnPointIndex].position, spawnPoints[spawnPointIndex].rotation);
+
+        for (int i = 0; i < enemyCount; i++)
+        {
+            Instantiate(enemy, new Vector3(spawnPoints[spawnPointIndex].position.x + Random.Range(-2f, 2f),
+                                            spawnPoints[spawnPointIndex].position.y,
+                                            spawnPoints[spawnPointIndex].position.z + Random.Range(-2f, 2f)), spawnPoints[spawnPointIndex].rotation);
+        }
     }
 }

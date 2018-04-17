@@ -9,7 +9,13 @@ public class PlayerShooting : MonoBehaviour {
     public float timeBetweenBullets = 0.15f;
     public float range = 100f;
     public int currentAmmo;
-    public int totalAmmo = 10;
+    public int maxAmmo = 10;
+
+    float nadeTimer;
+    public float timeBetweenThrows = 1f;
+    public int maxGrenadeCount;
+    public int currentGrenadeCount;
+    public GameObject grenade;
 
     float timer;
     Ray shootRay;
@@ -19,6 +25,7 @@ public class PlayerShooting : MonoBehaviour {
     LineRenderer gunLine;
     Light gunLight;
     float effectsDisplayTime = 0.2f;
+
 
     float ammoTimer;
     public float reloadTime = 1;
@@ -34,7 +41,8 @@ public class PlayerShooting : MonoBehaviour {
         //shootableMask = LayerMask.GetMask("ShootableMask");
         gunLine = GetComponent<LineRenderer>();
         gunLight = GetComponent<Light>();
-        currentAmmo = totalAmmo;
+        currentAmmo = maxAmmo;
+        currentGrenadeCount = maxGrenadeCount;
     }
 
     private void Update()
@@ -42,14 +50,20 @@ public class PlayerShooting : MonoBehaviour {
         ammoText.text = currentAmmo.ToString("00");
 
         timer += Time.deltaTime;
+        nadeTimer += Time.deltaTime;
 
-        if(Input.GetButton("Fire1") && timer >= timeBetweenBullets && currentAmmo > 0)
+        if (Input.GetButton("Fire1") && timer >= timeBetweenBullets && currentAmmo > 0)
         {
             Shoot();
             StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
         }
 
-        if(timer >= timeBetweenBullets * effectsDisplayTime)
+        if (Input.GetButton("Fire2") && nadeTimer >= timeBetweenThrows && currentGrenadeCount > 0)
+        {
+            ThrowGrenade();
+        }
+
+        if (timer >= timeBetweenBullets * effectsDisplayTime)
         {
             DisableEffects();
         }
@@ -59,7 +73,7 @@ public class PlayerShooting : MonoBehaviour {
             ammoTimer += Time.deltaTime;
             if(ammoTimer >= reloadTime)
             {
-                currentAmmo = totalAmmo;
+                currentAmmo = maxAmmo;
                 ammoTimer = 0f;
             }
         }
@@ -96,5 +110,12 @@ public class PlayerShooting : MonoBehaviour {
         }
 
         currentAmmo--;
+    }
+
+    void ThrowGrenade()
+    {
+        nadeTimer = 0f;
+        Instantiate(grenade, new Vector3(transform.position.x, transform.position.y, transform.position.z), transform.rotation);
+        currentGrenadeCount--;
     }
 }

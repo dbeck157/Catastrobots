@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerShooting : MonoBehaviour {
 
     public int damagePerShot = 20;
     public float timeBetweenBullets = 0.15f;
     public float range = 100f;
+    public int currentAmmo;
+    public int totalAmmo = 10;
 
     float timer;
     Ray shootRay;
@@ -17,25 +20,48 @@ public class PlayerShooting : MonoBehaviour {
     Light gunLight;
     float effectsDisplayTime = 0.2f;
 
+    float ammoTimer;
+    public float reloadTime = 1;
+
+    public Text ammoText;
+
+    public CameraShake cameraShake;
+    public float shakeDuration = 0f;
+    public float shakeMagnitude = 0f;
+
     private void Awake()
     {
         //shootableMask = LayerMask.GetMask("ShootableMask");
         gunLine = GetComponent<LineRenderer>();
         gunLight = GetComponent<Light>();
+        currentAmmo = totalAmmo;
     }
 
     private void Update()
     {
+        ammoText.text = currentAmmo.ToString("00");
+
         timer += Time.deltaTime;
 
-        if(Input.GetButton("Fire1") && timer >= timeBetweenBullets)
+        if(Input.GetButton("Fire1") && timer >= timeBetweenBullets && currentAmmo > 0)
         {
             Shoot();
+            StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
         }
 
         if(timer >= timeBetweenBullets * effectsDisplayTime)
         {
             DisableEffects();
+        }
+
+        if(currentAmmo == 0)
+        {
+            ammoTimer += Time.deltaTime;
+            if(ammoTimer >= reloadTime)
+            {
+                currentAmmo = totalAmmo;
+                ammoTimer = 0f;
+            }
         }
     }
 
@@ -68,5 +94,7 @@ public class PlayerShooting : MonoBehaviour {
         {
             gunLine.SetPosition(1, shootRay.origin + shootRay.direction * range);
         }
+
+        currentAmmo--;
     }
 }

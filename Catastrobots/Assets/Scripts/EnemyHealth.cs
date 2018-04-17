@@ -15,11 +15,13 @@ public class EnemyHealth : MonoBehaviour {
     bool isDead;
     bool isSinking;
 
+    ParticleSystem deathParticles;
+
     private void Awake()
     {
         //hitParticles = GetComponentInChildren<ParticleSystem>();
         boxCollider = GetComponent<BoxCollider>();
-
+        deathParticles = GetComponentInChildren<ParticleSystem>();
         currentHealth = startingHealth;
     }
 
@@ -51,9 +53,9 @@ public class EnemyHealth : MonoBehaviour {
 
     void Death()
     {
+        deathParticles.Play();
         StartSinking();
         isDead = true;
-
 
         if (boxCollider != null)
         {
@@ -64,6 +66,7 @@ public class EnemyHealth : MonoBehaviour {
     void StartSinking()
     {
         GetComponent<NavMeshAgent>().enabled = false;
+        GetComponent<MeshRenderer>().enabled = false;
         GetComponent<Rigidbody>().isKinematic = true;
         isSinking = true;
 

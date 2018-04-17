@@ -17,10 +17,13 @@ public class PlayerHealth : MonoBehaviour {
     bool isDead;
     bool damaged;
 
+    ParticleSystem deathParticles;
+
     private void Awake()
     {
         playerMovement = GetComponent<PlayerMovement>();
         playerShooting = GetComponentInChildren<PlayerShooting>();
+        deathParticles = GetComponentInChildren<ParticleSystem>();
         currentHealth = startingHealth;
     }
 
@@ -53,11 +56,21 @@ public class PlayerHealth : MonoBehaviour {
     {
         isDead = true;
 
-        playerShooting.DisableEffects();
+        deathParticles.Play();
 
+        playerShooting.DisableEffects();
         playerMovement.enabled = false;
         playerShooting.enabled = false;
         
+        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<Rigidbody>().isKinematic = true;
+
+        StartCoroutine("Wait");
+    }
+
+    IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(5f);
         SceneManager.LoadScene("MainMenu");
     }
 }
